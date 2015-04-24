@@ -5,8 +5,12 @@ import (
 	"unsafe"
 )
 
-func B2S(buf []byte) unsafe.Pointer {
-	p := (*reflect.SliceHeader)(unsafe.Pointer(&buf))
-	up := unsafe.Pointer(p.Data)
-	return up
+func B2S(buf []byte) string {
+	return *(*string)(unsafe.Pointer(&buf))
+}
+
+func S2B(s *string) []byte {
+	v := (*reflect.SliceHeader)(unsafe.Pointer(s))
+	val := *(*[]byte)(unsafe.Pointer((v)))
+	return val
 }
