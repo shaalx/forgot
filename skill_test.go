@@ -1,7 +1,9 @@
 package forgot
 
 import (
+	"reflect"
 	"testing"
+	"unsafe"
 )
 
 func TestB2S(t *testing.T) {
@@ -15,17 +17,18 @@ func TestB2S(t *testing.T) {
 	t.Log([]byte(ret))
 }
 
-func BenchmarkB2S(b *testing.B) {
-	buf := []byte("No zuo no die, why still try?")
-	for i := 0; i < b.N; i++ {
-		_ = B2S(buf)
-	}
-}
-
 func Benchmark_B2SB_Normal(b *testing.B) {
 	buf := []byte("No zuo no die, why still try?")
 	for i := 0; i < b.N; i++ {
 		_ = string(buf)
+	}
+}
+
+func BenchmarkB2S(b *testing.B) {
+	buf := []byte("No zuo no die, why still try?")
+	for i := 0; i < b.N; i++ {
+		// _ = B2S(buf)
+		_ = *(*string)(unsafe.Pointer(&buf))
 	}
 }
 
@@ -50,6 +53,7 @@ func Benchmark_S2B_Normal(b *testing.B) {
 func Benchmark_S2B(b *testing.B) {
 	s := "No zuo no die, why still try?"
 	for i := 0; i < b.N; i++ {
-		_ = S2B(&s)
+		// _ = S2B(&s)
+		_ = *(*[]byte)(unsafe.Pointer((*reflect.SliceHeader)(unsafe.Pointer(&s))))
 	}
 }

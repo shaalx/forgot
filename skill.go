@@ -10,7 +10,5 @@ func B2S(buf []byte) string {
 }
 
 func S2B(s *string) []byte {
-	v := (*reflect.SliceHeader)(unsafe.Pointer(s))
-	val := *(*[]byte)(unsafe.Pointer((v)))
-	return val
+	return *(*[]byte)(unsafe.Pointer((*reflect.SliceHeader)(unsafe.Pointer(s))))
 }
